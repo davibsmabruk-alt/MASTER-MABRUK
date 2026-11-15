@@ -1,0 +1,5 @@
+{
+  "name": "master-mabruk",
+  "owner": { "name": "davibsmabruk-alt" },
+  "plugins": [{ "name": "limpa-pc", "source": "./plugins/limpa-pc" }]
+}
