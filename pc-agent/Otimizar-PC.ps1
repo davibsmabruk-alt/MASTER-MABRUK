@@ -32,7 +32,13 @@ param(
     [switch]$EfeitosVisuaisLeves,
 
     # Também limpa a Lixeira (desligado por padrão para você não perder nada sem querer).
-    [switch]$EsvaziarLixeira
+    [switch]$EsvaziarLixeira,
+
+    # Caminho do relatório (padrão: Área de Trabalho). Usado pelo painel do Claude.
+    [string]$Relatorio,
+
+    # Não espera ENTER no final (usado pelo painel do Claude).
+    [switch]$SemPausa
 )
 
 $ErrorActionPreference = 'Continue'
@@ -40,13 +46,15 @@ $ProgressPreference = 'SilentlyContinue'
 
 # ---------------------------------------------------------------- Admin
 $principal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
-if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+if ($Modo -ne 'Diagnostico' -and -not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
     Write-Host 'Pedindo permissão de administrador...' -ForegroundColor Yellow
     $argList = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', "`"$PSCommandPath`"", '-Modo', $Modo)
     if ($Simular) { $argList += '-Simular' }
     if ($Reparar) { $argList += '-Reparar' }
     if ($EfeitosVisuaisLeves) { $argList += '-EfeitosVisuaisLeves' }
     if ($EsvaziarLixeira) { $argList += '-EsvaziarLixeira' }
+    if ($Relatorio) { $argList += @('-Relatorio', "`"$Relatorio`"") }
+    if ($SemPausa) { $argList += '-SemPausa' }
     Start-Process powershell.exe -Verb RunAs -ArgumentList $argList
     exit
 }
@@ -54,7 +62,7 @@ if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administra
 # ---------------------------------------------------------------- Relatório
 $desktop = [Environment]::GetFolderPath('Desktop')
 $stamp = Get-Date -Format 'yyyy-MM-dd_HH-mm'
-$relatorio = Join-Path $desktop "Relatorio-PC_$stamp.txt"
+$relatorio = if ($Relatorio) { $Relatorio } else { Join-Path $desktop "Relatorio-PC_$stamp.txt" }
 Start-Transcript -Path $relatorio -Force | Out-Null
 
 function Titulo([string]$t) {
@@ -388,5 +396,7 @@ if (-not $Simular -and $Modo -in 'Limpeza', 'Otimizacao', 'Completo') {
     Aviso 'Reinicie o computador para aplicar tudo.'
 }
 Stop-Transcript | Out-Null
-Write-Host ''
-Read-Host 'Pressione ENTER para fechar'
+if (-not $SemPausa) {
+    Write-Host ''
+    Read-Host 'Pressione ENTER para fechar'
+}
