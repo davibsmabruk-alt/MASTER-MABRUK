@@ -1,7 +1,7 @@
 {
   "name": "limpa-pc",
-  "version": "0.1.0",
-  "description": "Painel simples para limpar e acelerar o PC Windows com dois botões",
+  "version": "0.2.0",
+  "description": "Painel simples para limpar o PC Windows e liberar espaço nos discos com segurança (verde/amarelo/vermelho)",
   "types": "./types/index.d.ts",
   "license": "MIT"
 }

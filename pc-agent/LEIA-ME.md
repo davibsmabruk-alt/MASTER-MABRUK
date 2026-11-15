@@ -29,3 +29,15 @@ Com o Claude Code instalado no Windows, abra este repositório e peça:
 > "use o agente pc-performance para limpar e otimizar meu PC"
 
 O agente (`.claude/agents/pc-performance.md`) roda o diagnóstico, explica os problemas, pede sua confirmação e executa a limpeza.
+
+## Liberar espaço nos discos (SSD / NVMe / HD) — `Mapa-Espaco.ps1`
+Feito para PC de edição de vídeo/foto. Clique com o botão direito > **Executar com o PowerShell**, ou use o painel do Claude.
+
+| Cor | O que é | O que acontece |
+|---|---|---|
+| 🟢 Verde | Caches do Premiere/After Effects/DaVinci/Camera Raw, previews renderizados, cópias automáticas além das 3 mais novas | `-Acao LimparVerde` apaga. Os programas recriam sozinhos |
+| 🟡 Amarelo | Projetos parados há 6+ meses, proxies, duplicados, instaladores antigos | Só com um "sim", indo para a **quarentena** (`X:\_QUARENTENA_LIMPEZA`). `-Acao Desfazer` devolve tudo |
+| 🔴 Vermelho | Brutos, RAW, arquivos de projeto, vídeos finais, documentos, Windows | Nunca é apagado pela ferramenta |
+
+Também mostra a saúde de cada disco (desgaste, temperatura, erros) e alerta quando um SSD passa de 80% cheio.
+`-Acao AgendarManutencao` liga uma limpeza automática de caches velhos todo domingo.

@@ -1,4 +1,4 @@
-export type Fase = 'inicio' | 'analisando' | 'limpando' | 'pronto' | 'erro' | 'semWindows'
+export type Fase = 'inicio' | 'trabalhando' | 'pronto' | 'erro' | 'semWindows'
 
 export type Tela = {
   fase: Fase
@@ -6,6 +6,8 @@ export type Tela = {
   mensagem: string
   linhas: string[]
   verTudo: boolean
+  /** Já existe um mapa do espaço: mostra os botões de limpeza do verde e da revisão. */
+  temMapa: boolean
 }
 
 declare module 'claude-code' {
